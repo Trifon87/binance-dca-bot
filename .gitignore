@@ -1,0 +1,26 @@
+# Secrets
+.env
+
+# Local state / logs (генерирани от бота)
+*.log
+carry_state.json
+positions.json
+open_orders.json
+
+# Editor/backup copies
+*.bak
+*.save
+*.save.*
+*.before_ws
+*_backup.py
+*_old.py
+dca_bot*.py
+!dca_bot.py
+# Backup/copies
+*.bak*
+*.json.bak*
+
+# Python
+__pycache__/
+*.pyc
+venv/
