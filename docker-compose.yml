@@ -24,10 +24,9 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ALLOW_EMBEDDING=true    # <--- ТОВА разрешава Iframe
-      - GF_AUTH_ANONYMOUS_ENABLED=true      # <--- ТОВА маха нуждата от парола
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer   # <--- ТОВА дава права само за гледане
-#     - GF_SECURITY_ADMIN_PASSWORD=Graf1kaBOT
+      - GF_SECURITY_ALLOW_EMBEDDING=true    
+      - GF_AUTH_ANONYMOUS_ENABLED=true      
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer   
     depends_on:
       postgres:
         condition: service_healthy
