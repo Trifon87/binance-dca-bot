@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: dcabot-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: dcabot
+      POSTGRES_PASSWORD: Postene
+      POSTGRES_DB: dcabot
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - dcabot_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dcabot -d dcabot"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: dcabot-grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ALLOW_EMBEDDING=true    # <--- ТОВА разрешава Iframe
+      - GF_AUTH_ANONYMOUS_ENABLED=true      # <--- ТОВА маха нуждата от парола
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer   # <--- ТОВА дава права само за гледане
+#     - GF_SECURITY_ADMIN_PASSWORD=Graf1kaBOT
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+volumes:
+  dcabot_pgdata:
+  grafana_data:
+

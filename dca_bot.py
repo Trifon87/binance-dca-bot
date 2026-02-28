@@ -31,6 +31,7 @@ import json
 import logging
 import threading
 import requests
+from storage_pg import log_event, upsert_order
 
 from datetime import datetime
 from typing import Dict, Tuple, Optional
@@ -1068,6 +1069,7 @@ def ws_handle_user_event(msg: dict) -> None:
 
         avg_price = (quote_cum_f / cum_qty_f) if cum_qty_f > 0 else last_price_f
         update_position(symbol, cum_qty_f, avg_price, quote_cum_f)
+        log_event("FILLED", symbol, order_id, msg)
 
         tracked = OPEN_ORDERS.get(symbol)
         if tracked and str(tracked.get("id")) == order_id:
@@ -1153,12 +1155,16 @@ def try_place_from_carry(symbol: str) -> None:
             f"i {symbol} spend={spend:.2f} < minNotional={min_notional:.2f} "
             f"(carry={carry:.2f}, usdc_free={usdc_free:.2f}) => skip"
         )
+        log_event("SKIP", symbol, None, {"carry": carry, "usdc_free": usdc_free, "spend": spend, "minNotional": min_notional})
         return
 
     dyn_offset = get_dynamic_offset_percent(symbol)
     order = place_post_only_limit_buy(symbol, spend, dyn_offset)
 
     if order and order.get("id"):
+        oid = str(order["id"])
+        log_event("PLACE", symbol, oid, {"spend": spend, "offset": dyn_offset})
+        upsert_order(oid, symbol, order)
         OPEN_ORDERS[symbol] = {"id": str(order["id"]), "planned_spend_usdc": spend}
         save_open_orders()
 
