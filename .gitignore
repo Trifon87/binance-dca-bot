@@ -1,7 +1,7 @@
 # Secrets
 .env
 .env.*
-
+docker-compose.yml
 # Local state / logs
 *.log
 carry_state.json

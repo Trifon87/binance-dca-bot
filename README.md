@@ -53,3 +53,8 @@ python3 dca_bot.py
 
 ## Disclaimer
 Educational project. Use at your own risk. Test with small amounts before using real funds.
+
+## Local Setup
+1. Copy `.env.example` → `.env` и попълни стойностите
+2. `docker compose -f docker-compose.example.yml up -d`
+3. Grafana: http://localhost:3000 (анонимен достъп)
