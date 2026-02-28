@@ -4,9 +4,9 @@ services:
     container_name: dcabot-postgres
     restart: always
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: PASS
-      POSTGRES_DB: dcabot
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
